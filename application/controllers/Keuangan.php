@@ -16,7 +16,9 @@ class Keuangan extends CI_Controller {
 	{
 		$data = array(
 			"pemasukan" => $this->M_model->read('tr_pemasukan')->result(),
-			"pengeluaran" => $this->M_model->read('tr_pengeluaran')->result()
+			"pengeluaran" => $this->M_model->read('tr_pengeluaran')->result(),
+			"total_pemasukan" => $this->db->query("SELECT SUM(nominal) as total FROM tr_pemasukan")->row(),
+			"total_pengeluaran" => $this->db->query("SELECT SUM(nominal) as total FROM tr_pengeluaran")->row()
 		);
 
 		$this->load->view('header');

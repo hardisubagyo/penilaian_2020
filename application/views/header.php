@@ -143,7 +143,7 @@
                                             </a>
                                         </li>
                                         <li class="sidebar-item">
-                                            <a href="<?php echo site_url('InputNilai'); ?>" class="sidebar-link">
+                                            <a href="<?php echo site_url('Penilaian'); ?>" class="sidebar-link">
                                                 <i class="mdi mdi-vector-difference-ba"></i><span class="hide-menu"> Input Nilai</span>
                                             </a>
                                         </li>

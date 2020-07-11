@@ -17,6 +17,55 @@
 <?php } ?>
 
 <div class="row">
+    <div class="col-sm-12 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row m-t-10">
+                    
+                    <div class="col-md-6 col-sm-12 col-lg-4">
+                        <div class="d-flex align-items-center">
+                            <div class="m-r-10"><span class="text-info display-5"><i class="mdi mdi-download"></i></span></div>
+                            <div><span class="text-muted">Total Pemasukan</span>
+                                <h3 class="font-medium m-b-0">
+                                    <div id="totalpemasukan">Rp. <?php echo number_format($total_pemasukan->total,0,'.','.'); ?></div>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-sm-12 col-lg-4">
+                        <div class="d-flex align-items-center">
+                            <div class="m-r-10"><span class="text-danger display-5"><i class="mdi mdi-upload"></i></span></div>
+                            <div><span class="text-muted">Total Pengeluaran</span>
+                                <h3 class="font-medium m-b-0">
+                                    <div id="totalpengeluaran">Rp. <?php echo number_format($total_pengeluaran->total,0,'.','.'); ?></div>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <?php 
+                        $selisih = $total_pemasukan->total - $total_pengeluaran->total;
+                    ?>
+                    
+                    <div class="col-md-6 col-sm-12 col-lg-4">
+                        <div class="d-flex align-items-center">
+                            <div class="m-r-10"><span class="text-success display-5"><i class="mdi mdi-arrange-send-backward"></i></span></div>
+                            <div><span class="text-muted">Selisih</span>
+                                <h3 class="font-medium m-b-0">
+                                    <div id="totalselisih">Rp. <?php echo number_format($selisih,0,'.','.'); ?></div>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
