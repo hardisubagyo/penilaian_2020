@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="d-md-flex align-items-center">
                     <div>
-                        <h4 class="card-title">Data Nilai Kelas <?php echo $this->uri->segment('3'); ?> Mata Pelajaran <?php echo $matpel->nama; ?> Tanggal <?php echo $this->uri->segment('5'); ?></h4>
+                        <h4 class="card-title">Data Nilai Sikap & Perilaku Kelas <?php echo $this->uri->segment('3'); ?> Tanggal <?php echo $this->uri->segment('4'); ?></h4>
                     </div>
                 </div>
                 <br>
@@ -32,9 +32,10 @@
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Siswa</th>
-                                    <th>Nilai</th>
+                                    <th width="5%">No</th>
+                                    <th width="20%">Siswa</th>
+                                    <th width="15%">Nilai</th>
+                                    <th>Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,6 +47,7 @@
                                         <td><?php echo $no++; ?></td>
                                         <td><?php echo $item->namasiswa; ?></td>
                                         <td><?php echo $item->nilai; ?></td>
+                                        <td><?php echo $item->keterangan; ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -54,7 +56,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="<?php echo site_url('DaftarNilai/LihatDetailNilai/'.$this->uri->segment('3')); ?>">
+                <a href="<?php echo site_url('DaftarNilai/LihatDetailNilaiSikap/'.$this->uri->segment('3')); ?>">
                     <button type="button" class="btn btn-warning">Kembali</button>
                 </a>
             </div>

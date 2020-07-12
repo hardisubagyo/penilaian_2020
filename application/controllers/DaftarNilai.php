@@ -55,6 +55,23 @@ class DaftarNilai extends CI_Controller {
 		$this->load->view('footer');
 	}
 
+	public function LihatDetailNilaiSikap($kelas)
+	{
+		$data = array(
+			"tanggal" => $this->db->query("
+									SELECT 
+										distinct(tr_nilai_sikap.tanggal)
+									FROM tr_nilai_sikap
+									JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai_sikap.id_siswa
+									WHERE tm_siswa.kelas = '$kelas'
+								")->result()
+		);
+		
+		$this->load->view('header');
+		$this->load->view('daftarnilai/lihatdetailnilaisikap', $data);
+		$this->load->view('footer');
+	}
+
 	public function Lihat($kelas,$matpel,$tgl)
 	{
 		$data = array(
@@ -78,6 +95,28 @@ class DaftarNilai extends CI_Controller {
 
 		$this->load->view('header');
 		$this->load->view('daftarnilai/lihat', $data);
+		$this->load->view('footer');
+	}
+
+	public function LihatSikap($kelas,$tgl)
+	{
+		$data = array(
+			"nilai" => $this->db->query("
+							SELECT
+								tr_nilai_sikap.id_nilai,
+								tr_nilai_sikap.nilai,
+								tr_nilai_sikap.keterangan,
+								tm_siswa.nama as namasiswa
+							FROM tr_nilai_sikap
+							JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai_sikap.id_siswa
+							WHERE tm_siswa.kelas = '$kelas'
+							AND tr_nilai_sikap.tanggal = '$tgl'
+							ORDER BY tm_siswa.nama ASC
+						")->result()
+		);
+
+		$this->load->view('header');
+		$this->load->view('daftarnilai/lihatsikap', $data);
 		$this->load->view('footer');
 	}
 
@@ -105,6 +144,31 @@ class DaftarNilai extends CI_Controller {
 
 		$this->load->view('header');
 		$this->load->view('daftarnilai/edit', $data);
+		$this->load->view('footer');
+	}
+
+	public function EditSikap($kelas,$tgl)
+	{
+		$data = array(
+			"nilai" => $this->db->query("
+							SELECT
+								tr_nilai_sikap.id_nilai,
+								tr_nilai_sikap.nilai,
+								tr_nilai_sikap.keterangan,
+								tm_siswa.nama as namasiswa,
+								tm_siswa.id_siswa
+							FROM tr_nilai_sikap
+							JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai_sikap.id_siswa
+							WHERE tm_siswa.kelas = '$kelas'
+							AND tr_nilai_sikap.tanggal = '$tgl'
+							ORDER BY tm_siswa.nama ASC
+						")->result()
+		);
+
+		/*echo json_encode($data);*/
+
+		$this->load->view('header');
+		$this->load->view('daftarnilai/editsikap', $data);
 		$this->load->view('footer');
 	}
 
@@ -145,6 +209,40 @@ class DaftarNilai extends CI_Controller {
 		redirect(site_url('DaftarNilai/LihatDetailNilai/'.$kelas.'/'.$matpel));
 	}
 
+	public function ubahsikap(){
+		$kelas = $this->input->post('kelas');
+		$tanggal = $this->input->post('tanggal');
+
+		$getnilai = $this->db->query("
+			SELECT
+				tr_nilai_sikap.id_nilai
+			FROM tr_nilai_sikap
+			JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai_sikap.id_siswa
+			WHERE tm_siswa.kelas = '$kelas'
+			AND tr_nilai_sikap.tanggal = '$tanggal'
+		")->result();
+
+		foreach($getnilai as $get){
+			$this->db->query("DELETE FROM tr_nilai_sikap WHERE id_nilai = '$get->id_nilai'");
+		}
+
+		$siswa = $this->db->query("SELECT * FROM tm_siswa WHERE kelas = '$kelas'")->result();
+
+		foreach($siswa as $item) {
+			$data = array(
+				"id_siswa" => $this->input->post("siswa".$item->id_siswa),
+				"keterangan" => $this->input->post("keterangan".$item->id_siswa),
+				"nilai" => $this->input->post("nilai".$item->id_siswa),
+				"tanggal" => $tanggal
+			);
+
+			$insert = $this->M_model->insert('tr_nilai_sikap',$data);
+		}
+
+		$this->session->set_flashdata('success', 'Berhasil diinput');
+		redirect(site_url('DaftarNilai/LihatDetailNilaiSikap/'.$kelas));
+	}
+
 	public function Hapus($kelas,$matpel,$tanggal){
 		$getnilai = $this->db->query("
 			SELECT
@@ -163,6 +261,24 @@ class DaftarNilai extends CI_Controller {
 
 		$this->session->set_flashdata('success', 'Berhasil dihapus');
 		redirect(site_url('DaftarNilai/LihatDetailNilai/'.$kelas.'/'.$matpel));
+	}
+
+	public function HapusSikap($kelas,$tanggal){
+		$getnilai = $this->db->query("
+			SELECT
+				tr_nilai_sikap.id_nilai
+			FROM tr_nilai_sikap
+			JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai_sikap.id_siswa
+			WHERE tm_siswa.kelas = '$kelas'
+			AND tr_nilai_sikap.tanggal = '$tanggal'
+		")->result();
+
+		foreach($getnilai as $get){
+			$this->db->query("DELETE FROM tr_nilai_sikap WHERE id_nilai = '$get->id_nilai'");
+		}
+
+		$this->session->set_flashdata('success', 'Berhasil dihapus');
+		redirect(site_url('DaftarNilai/LihatDetailNilaiSikap/'.$kelas));
 	}
 	
 }

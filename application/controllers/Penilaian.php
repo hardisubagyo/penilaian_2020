@@ -72,5 +72,38 @@ class Penilaian extends CI_Controller {
 
 	}
 
+	public function InsertSikap($kelas)
+	{
+		$data = array(
+			"siswa" => $this->db->query("SELECT * FROM tm_siswa WHERE kelas = '$kelas'")->result(),
+			"kelas" => $kelas
+		);
+
+		$this->load->view('header');
+		$this->load->view('penilaian/insertsikap', $data);
+		$this->load->view('footer');
+	}
+
+	public function SimpanNilaiSikap()
+	{
+		$kelas = $this->input->post('kelas');
+		$tgl = $this->input->post('tanggal');
+		
+		$siswa = $this->db->query("SELECT * FROM tm_siswa WHERE kelas = '$kelas'")->result();
+
+		foreach($siswa as $item) {
+			$data = array(
+				"id_siswa" => $this->input->post("siswa".$item->id_siswa),
+				"nilai" => $this->input->post("nilai".$item->id_siswa),
+				"keterangan" => $this->input->post("keterangan".$item->id_siswa),
+				"tanggal" => $tgl
+			);
+
+			$insert = $this->M_model->insert('tr_nilai_sikap',$data);
+		}
+
+		$this->session->set_flashdata('success', 'Berhasil diinput');
+		redirect(site_url('Penilaian/InputNilai/'.$kelas));
+	}
 	
 }

@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="d-md-flex align-items-center">
                     <div>
-                        <h4 class="card-title">Data Detail Nilai Kelas <?php echo $this->uri->segment('3'); ?> Tanggal <?php echo $matpel->nama; ?></h4>
+                        <h4 class="card-title">Data Detail Nilai Kelas <?php echo $this->uri->segment('3'); ?> Mata Pelajaran <?php echo $matpel->nama; ?></h4>
                     </div>
                 </div>
                 <br>
@@ -63,6 +63,17 @@
                     </div>
                 </div>
             </div>
+            <div class="card-footer">
+                <a href="<?php echo site_url('DaftarNilai/LihatNilai/'.$this->uri->segment('3')); ?>">
+                    <button type="button" class="btn btn-warning">Kembali</button>
+                </a>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+       $('#zero_config').DataTable(); 
+    });
+</script>

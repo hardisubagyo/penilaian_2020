@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="d-md-flex align-items-center">
                     <div>
-                        <h4 class="card-title">Data Nilai Kelas <?php echo $this->uri->segment('3'); ?> Mata Pelajaran <?php echo $matpel->nama; ?> Tanggal <?php echo $this->uri->segment('5'); ?></h4>
+                        <h4 class="card-title">Data Detail Nilai Sikap & Perilaku Kelas <?php echo $this->uri->segment('3'); ?> </h4>
                     </div>
                 </div>
                 <br>
@@ -29,23 +29,33 @@
 
                 <div class="row">
                     <div class="table-responsive">
-                        <table id="zero_config" class="table table-striped table-bordered">
+                        <table id="zero_config" class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Siswa</th>
-                                    <th>Nilai</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php 
                                     $no = 1;
-                                    foreach($nilai as $item) { 
+                                    foreach($tanggal as $item) { 
                                 ?>
                                     <tr>
                                         <td><?php echo $no++; ?></td>
-                                        <td><?php echo $item->namasiswa; ?></td>
-                                        <td><?php echo $item->nilai; ?></td>
+                                        <td><?php echo $item->tanggal; ?></td>
+                                        <td>
+                                            <a href="<?php echo site_url('DaftarNilai/LihatSikap/'.$this->uri->segment('3').'/'.$item->tanggal); ?>">
+                                                <button type="button" class="btn waves-effect waves-light btn-info">Lihat Nilai</button>
+                                            </a>
+                                            <a href="<?php echo site_url('DaftarNilai/EditSikap/'.$this->uri->segment('3').'/'.$item->tanggal); ?>">
+                                                <button type="button" class="btn waves-effect waves-light btn-warning">Edit Nilai</button>
+                                            </a>
+                                            <a href="<?php echo site_url('DaftarNilai/HapusSikap/'.$this->uri->segment('3').'/'.$item->tanggal); ?>">
+                                                <button type="button" class="btn waves-effect waves-light btn-danger">Hapus Nilai</button>
+                                            </a>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -54,7 +64,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="<?php echo site_url('DaftarNilai/LihatDetailNilai/'.$this->uri->segment('3')); ?>">
+                <a href="<?php echo site_url('DaftarNilai/LihatNilai/'.$this->uri->segment('3')); ?>">
                     <button type="button" class="btn btn-warning">Kembali</button>
                 </a>
             </div>

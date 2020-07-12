@@ -21,8 +21,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Sikap & Perilaku</td>
+                                        <td>
+                                            <a href="<?php echo site_url('Penilaian/InsertSikap/'.$this->uri->segment('3')); ?>">
+                                                <button type="button" class="btn waves-effect waves-light btn-info">Input Nilai</button>
+                                            </a>
+                                        </td>
+                                    </tr>
                                     <?php 
-                                        $no = 1;
+                                        $no = 2;
                                         foreach($matpel as $item) { 
                                     ?>
                                         <tr>
@@ -40,7 +49,11 @@
                         </div>
                     </div>
                 </div>
-            
+                <div class="card-footer">
+                    <a href="<?php echo site_url('Penilaian'); ?>">
+                        <button type="button" class="btn btn-warning">Kembali</button>
+                    </a>
+                </div>
         </div>
     </div>
 </div>
