@@ -25,12 +25,10 @@ class DaftarNilai extends CI_Controller {
 
 	public function LihatNilai($id)
 	{
-		$data['tanggalnilai'] = $this->db->query("
+		$data['matpel'] = $this->db->query("
 									SELECT 
-										distinct(tanggal)
-									FROM tr_nilai
-									JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai.id_siswa
-									WHERE tm_siswa.kelas = '$id'
+										*
+									FROM tm_mata_pelajaran
 								")->result();
 
 		$this->load->view('header');
@@ -38,29 +36,74 @@ class DaftarNilai extends CI_Controller {
 		$this->load->view('footer');
 	}
 
-	public function LihatDetailNilai($kelas,$tanggal)
+	public function LihatDetailNilai($kelas,$matpel)
 	{
 		$data = array(
-			"siswa" => $this->db->query("SELECT * FROM tm_siswa WHERE kelas = '$kelas'")->result(),
-			"matpel" => $this->db->query("SELECT * FROM tm_mata_pelajaran")->result(),
-			"nilai" => $this->db->query("
+			"tanggal" => $this->db->query("
 									SELECT 
-										tr_nilai.id_nilai,
-										tm_siswa.id_siswa,
-										tm_siswa.nama as namasiswa,
-										tm_mata_pelajaran.id_mata_pelajaran,
-										tm_mata_pelajaran.nama as namapelajaran,
-										tr_nilai.nilai
+										distinct(tr_nilai.tanggal)
 									FROM tr_nilai
 									JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai.id_siswa
-									JOIN tm_mata_pelajaran ON tm_mata_pelajaran.id_mata_pelajaran = tr_nilai.id_mata_pelajaran
-									WHERE tr_nilai.tanggal = '$tanggal'
+									WHERE tr_nilai.id_mata_pelajaran = '$matpel'
 									AND tm_siswa.kelas = '$kelas'
-								")->result()
+								")->result(),
+			"matpel" => $this->db->query("SELECT nama from tm_mata_pelajaran where id_mata_pelajaran = '$matpel'")->row()
 		);
 		
 		$this->load->view('header');
 		$this->load->view('daftarnilai/lihatdetailnilai', $data);
+		$this->load->view('footer');
+	}
+
+	public function Lihat($kelas,$matpel,$tgl)
+	{
+		$data = array(
+			"nilai" => $this->db->query("
+							SELECT
+								tr_nilai.id_nilai,
+								tr_nilai.nilai,
+								tm_siswa.nama as namasiswa
+							FROM tr_nilai
+							JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai.id_siswa
+							JOIN tm_mata_pelajaran ON tm_mata_pelajaran.id_mata_pelajaran = tr_nilai.id_mata_pelajaran
+							WHERE tm_siswa.kelas = '$kelas'
+							AND tr_nilai.id_mata_pelajaran = '$matpel'
+							AND tr_nilai.tanggal = '$tgl'
+							ORDER BY tm_siswa.nama ASC
+						")->result(),
+			"matpel" => $this->db->query("SELECT nama from tm_mata_pelajaran where id_mata_pelajaran = '$matpel'")->row()
+		);
+
+		/*echo json_encode($data);*/
+
+		$this->load->view('header');
+		$this->load->view('daftarnilai/lihat', $data);
+		$this->load->view('footer');
+	}
+
+	public function Edit($kelas,$matpel,$tgl)
+	{
+		$data = array(
+			"nilai" => $this->db->query("
+							SELECT
+								tr_nilai.id_nilai,
+								tr_nilai.nilai,
+								tm_siswa.nama as namasiswa
+							FROM tr_nilai
+							JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai.id_siswa
+							JOIN tm_mata_pelajaran ON tm_mata_pelajaran.id_mata_pelajaran = tr_nilai.id_mata_pelajaran
+							WHERE tm_siswa.kelas = '$kelas'
+							AND tr_nilai.id_mata_pelajaran = '$matpel'
+							AND tr_nilai.tanggal = '$tgl'
+							ORDER BY tm_siswa.nama ASC
+						")->result(),
+			"matpel" => $this->db->query("SELECT nama from tm_mata_pelajaran where id_mata_pelajaran = '$matpel'")->row()
+		);
+
+		/*echo json_encode($data);*/
+
+		$this->load->view('header');
+		$this->load->view('daftarnilai/edit', $data);
 		$this->load->view('footer');
 	}
 	

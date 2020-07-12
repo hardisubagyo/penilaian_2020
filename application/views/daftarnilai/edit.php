@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="d-md-flex align-items-center">
                     <div>
-                        <h4 class="card-title">Data Mata Pelajaran</h4>
+                        <h4 class="card-title">Edit Nilai Kelas <?php echo $this->uri->segment('3'); ?> Mata Pelajaran <?php echo $matpel->nama; ?> Tanggal <?php echo $this->uri->segment('5'); ?></h4>
                     </div>
                 </div>
                 <br>
@@ -33,23 +33,19 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Mata Pelajaran</th>
-                                    <th>Aksi</th>
+                                    <th>Siswa</th>
+                                    <th>Nilai</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php 
                                     $no = 1;
-                                    foreach($matpel as $item) { 
+                                    foreach($nilai as $item) { 
                                 ?>
                                     <tr>
                                         <td><?php echo $no++; ?></td>
-                                        <td><?php echo $item->nama; ?></td>
-                                        <td>
-                                            <a href="<?php echo site_url('DaftarNilai/LihatDetailNilai/'.$this->uri->segment('3').'/'.$item->id_mata_pelajaran); ?>">
-                                                <button type="button" class="btn waves-effect waves-light btn-success">Lihat Detail Nilai</button>
-                                            </a>
-                                        </td>
+                                        <td><?php echo $item->namasiswa; ?></td>
+                                        <td><?php echo $item->nilai; ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -60,9 +56,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(document).ready(function(){
-       $('#zero_config').DataTable(); 
-    });
-</script>
