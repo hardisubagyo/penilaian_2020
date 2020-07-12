@@ -88,7 +88,8 @@ class DaftarNilai extends CI_Controller {
 							SELECT
 								tr_nilai.id_nilai,
 								tr_nilai.nilai,
-								tm_siswa.nama as namasiswa
+								tm_siswa.nama as namasiswa,
+								tm_siswa.id_siswa
 							FROM tr_nilai
 							JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai.id_siswa
 							JOIN tm_mata_pelajaran ON tm_mata_pelajaran.id_mata_pelajaran = tr_nilai.id_mata_pelajaran
@@ -105,6 +106,63 @@ class DaftarNilai extends CI_Controller {
 		$this->load->view('header');
 		$this->load->view('daftarnilai/edit', $data);
 		$this->load->view('footer');
+	}
+
+	public function ubah(){
+		$kelas = $this->input->post('kelas');
+		$matpel = $this->input->post('matpel');
+		$tanggal = $this->input->post('tanggal');
+
+		$getnilai = $this->db->query("
+			SELECT
+				tr_nilai.id_nilai
+			FROM tr_nilai
+			JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai.id_siswa
+			JOIN tm_mata_pelajaran ON tm_mata_pelajaran.id_mata_pelajaran = tr_nilai.id_mata_pelajaran
+			WHERE tm_siswa.kelas = '$kelas'
+			AND tr_nilai.id_mata_pelajaran = '$matpel'
+			AND tr_nilai.tanggal = '$tanggal'
+		")->result();
+
+		foreach($getnilai as $get){
+			$this->db->query("DELETE FROM tr_nilai WHERE id_nilai = '$get->id_nilai'");
+		}
+
+		$siswa = $this->db->query("SELECT * FROM tm_siswa WHERE kelas = '$kelas'")->result();
+
+		foreach($siswa as $item) {
+			$data = array(
+				"id_siswa" => $this->input->post("siswa".$item->id_siswa),
+				"id_mata_pelajaran" => $matpel,
+				"nilai" => $this->input->post("nilai".$item->id_siswa),
+				"tanggal" => $tanggal
+			);
+
+			$insert = $this->M_model->insert('tr_nilai',$data);
+		}
+
+		$this->session->set_flashdata('success', 'Berhasil diinput');
+		redirect(site_url('DaftarNilai/LihatDetailNilai/'.$kelas.'/'.$matpel));
+	}
+
+	public function Hapus($kelas,$matpel,$tanggal){
+		$getnilai = $this->db->query("
+			SELECT
+				tr_nilai.id_nilai
+			FROM tr_nilai
+			JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai.id_siswa
+			JOIN tm_mata_pelajaran ON tm_mata_pelajaran.id_mata_pelajaran = tr_nilai.id_mata_pelajaran
+			WHERE tm_siswa.kelas = '$kelas'
+			AND tr_nilai.id_mata_pelajaran = '$matpel'
+			AND tr_nilai.tanggal = '$tanggal'
+		")->result();
+
+		foreach($getnilai as $get){
+			$this->db->query("DELETE FROM tr_nilai WHERE id_nilai = '$get->id_nilai'");
+		}
+
+		$this->session->set_flashdata('success', 'Berhasil dihapus');
+		redirect(site_url('DaftarNilai/LihatDetailNilai/'.$kelas.'/'.$matpel));
 	}
 	
 }
