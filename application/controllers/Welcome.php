@@ -23,7 +23,10 @@ class Welcome extends CI_Controller {
 
 		$data = array(
 			"slide" => $this->M_model->read('tm_slide')->result(),
-			"max" => $this->db->query('SELECT MAX(id_slide) AS maxid FROM tm_slide')->row()
+			"max" => $this->db->query('SELECT MAX(id_slide) AS maxid FROM tm_slide')->row(),
+			"kopassus" => $this->db->query('SELECT COUNT(*) as total FROM tm_siswa WHERE asal_satuan = "Kopassus"')->row(),
+			"nonkopassus" => $this->db->query('SELECT COUNT(*) as total FROM tm_siswa WHERE asal_satuan = "Non Kopassus"')->row(),
+			"nilai" => $this->db->query("SELECT SUM(tr_nilai.nilai) AS nilai, tm_siswa.nama FROM tr_nilai JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai.id_siswa GROUP BY tr_nilai.id_siswa ORDER BY nilai DESC LIMIT 10")->result()
 		);
 
 		$this->load->view('header');

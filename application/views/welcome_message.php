@@ -24,6 +24,28 @@
     </div>
 </div>
 <br>
+<div class="row m-t-30">
+    <div class="col-md-6">
+        <div class="card text-white bg-danger">
+            <div class="card-header">
+                <h4 class="m-b-0 text-white">KOPASSUS</h4></div>
+            <div class="card-body">
+                <h3 class="card-title"><?php echo $kopassus->total; ?></h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-white bg-warning">
+            <div class="card-header">
+                <h4 class="m-b-0 text-white">NON KOPASSUS</h4></div>
+            <div class="card-body">
+                <h3 class="card-title"><?php echo $nonkopassus->total; ?></h3>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -37,13 +59,77 @@
                     <div class="col-lg-6">
                         <div class="campaign ct-charts"></div>
                     </div>
-                    <!-- column -->
                 </div>
             </div>
-            <!-- ============================================================== -->
-            <!-- Info Box -->
-            <!-- ============================================================== -->
-            
         </div>
     </div>
 </div>
+
+<script>
+    $(function() {
+    "use strict";
+    // ============================================================== 
+    // Newsletter
+    // ============================================================== 
+
+    var chart = new Chartist.Line('.campaign', {
+        labels: [
+                    <?php 
+                        foreach($nilai as $item){
+                            echo "'".$item->nama."',";
+                        }
+                    ?>
+                ],
+        series: [
+                    [
+                        <?php 
+                            foreach($nilai as $item){
+                                echo $item->nilai.",";
+                            }
+                        ?>
+                    ]
+                ]
+        }, {
+        showArea: true,
+        fullWidth: true,
+        plugins: [
+            Chartist.plugins.tooltip()
+        ],
+        axisY: {
+            onlyInteger: true,
+            scaleMinSpace: 40,
+            offset: 20,
+            labelInterpolationFnc: function(value) {
+                return (value / 1) + 'k';
+            }
+        },
+
+    });
+
+    chart.on('draw', function(ctx) {
+        if (ctx.type === 'area') {
+            ctx.element.attr({
+                x1: ctx.x1 + 0.001
+            });
+        }
+    });
+
+    chart.on('created', function(ctx) {
+        var defs = ctx.svg.elem('defs');
+        defs.elem('linearGradient', {
+            id: 'gradient',
+            x1: 0,
+            y1: 1,
+            x2: 0,
+            y2: 0
+        }).elem('stop', {
+            offset: 0,
+            'stop-color': 'rgba(255, 255, 255, 1)'
+        }).parent().elem('stop', {
+            offset: 1,
+            'stop-color': 'rgba(64, 196, 255, 1)'
+        });
+    });
+
+});
+</script>
