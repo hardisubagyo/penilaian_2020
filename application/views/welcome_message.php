@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <div class="campaign ct-charts"></div>
                     </div>
                 </div>
@@ -67,69 +67,65 @@
 
 <script>
     $(function() {
-    "use strict";
-    // ============================================================== 
-    // Newsletter
-    // ============================================================== 
+        "use strict";
 
-    var chart = new Chartist.Line('.campaign', {
-        labels: [
-                    <?php 
-                        foreach($nilai as $item){
-                            echo "'".$item->nama."',";
-                        }
-                    ?>
-                ],
-        series: [
-                    [
+        var chart = new Chartist.Line('.campaign', {
+            labels: [
                         <?php 
                             foreach($nilai as $item){
-                                echo $item->nilai.",";
+                                echo "'".$item->nama."',";
                             }
                         ?>
+                    ],
+            series: [
+                        [
+                            <?php 
+                                foreach($nilai as $item){
+                                    echo $item->total.",";
+                                }
+                            ?>
+                        ]
                     ]
-                ]
-        }, {
-        showArea: true,
-        fullWidth: true,
-        plugins: [
-            Chartist.plugins.tooltip()
-        ],
-        axisY: {
-            onlyInteger: true,
-            scaleMinSpace: 40,
-            offset: 20,
-            labelInterpolationFnc: function(value) {
-                return (value / 1) + 'k';
+            }, {
+            showArea: true,
+            fullWidth: true,
+            plugins: [
+                Chartist.plugins.tooltip()
+            ],
+            axisY: {
+                onlyInteger: true,
+                scaleMinSpace: 40,
+                offset: 20,
+                labelInterpolationFnc: function(value) {
+                    return (value / 1) + 'k';
+                }
+            },
+
+        });
+
+        chart.on('draw', function(ctx) {
+            if (ctx.type === 'area') {
+                ctx.element.attr({
+                    x1: ctx.x1 + 0.001
+                });
             }
-        },
+        });
 
-    });
-
-    chart.on('draw', function(ctx) {
-        if (ctx.type === 'area') {
-            ctx.element.attr({
-                x1: ctx.x1 + 0.001
+        chart.on('created', function(ctx) {
+            var defs = ctx.svg.elem('defs');
+            defs.elem('linearGradient', {
+                id: 'gradient',
+                x1: 0,
+                y1: 1,
+                x2: 0,
+                y2: 0
+            }).elem('stop', {
+                offset: 0,
+                'stop-color': 'rgba(255, 255, 255, 1)'
+            }).parent().elem('stop', {
+                offset: 1,
+                'stop-color': 'rgba(64, 196, 255, 1)'
             });
-        }
-    });
-
-    chart.on('created', function(ctx) {
-        var defs = ctx.svg.elem('defs');
-        defs.elem('linearGradient', {
-            id: 'gradient',
-            x1: 0,
-            y1: 1,
-            x2: 0,
-            y2: 0
-        }).elem('stop', {
-            offset: 0,
-            'stop-color': 'rgba(255, 255, 255, 1)'
-        }).parent().elem('stop', {
-            offset: 1,
-            'stop-color': 'rgba(64, 196, 255, 1)'
         });
     });
-
-});
 </script>
