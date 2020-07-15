@@ -65,6 +65,25 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-md-flex align-items-center">
+                    <div>
+                        <h4 class="card-title">Rata-rata Nilai Persiswa</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="chart1 ct-charts" style="height: 300px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(function() {
         "use strict";
@@ -127,5 +146,53 @@
                 'stop-color': 'rgba(64, 196, 255, 1)'
             });
         });
+
+        /*Rata-rata*/
+        new Chartist.Bar('.chart1', {
+            labels: [
+                    <?php 
+                        foreach($kkm as $item){
+                            echo "'".$item->nama."',";
+                        }
+                    ?>
+                ],
+            series: [
+                [
+                    <?php 
+                        foreach($nilai as $item){
+                            echo "'".$item->total."',";
+                        }
+                    ?>
+                ]
+            ]
+        }, {
+            stackBars: true,
+            axisY: {
+                labelInterpolationFnc: function(value) {
+                    return value;
+                }
+            },
+            axisX: {
+                showGrid: false
+            },
+            plugins: [
+                Chartist.plugins.tooltip()
+            ],
+            seriesBarDistance: 1,
+            chartPadding: {
+                top: 15,
+                right: 15,
+                bottom: 5,
+                left: 0
+            }
+        }).on('draw', function(data) {
+            if (data.type === 'bar') {
+                data.element.attr({
+                    style: 'stroke-width: 25px'
+                });
+            }
+        });
+
+
     });
 </script>
