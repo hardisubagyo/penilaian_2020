@@ -250,7 +250,7 @@
                         type:'bar',
                         data:[
                             <?php 
-                                foreach($nilai as $item){
+                                foreach($kkm as $item){
                                     echo "".$item->total.",";
                                 }
                             ?>
