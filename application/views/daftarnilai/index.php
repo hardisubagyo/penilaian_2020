@@ -49,6 +49,10 @@
                                             <a href="<?php echo site_url('DaftarNilai/LihatNilai/'.$item->kelas); ?>">
                                                 <button type="button" class="btn waves-effect waves-light btn-success">Lihat Nilai</button>
                                             </a>
+
+                                            <a href="<?php echo site_url('DaftarNilai/LihatKeseluruhanNilai/'.$item->kelas); ?>">
+                                                <button type="button" class="btn waves-effect waves-light btn-info">Lihat Keseluruhan Nilai</button>
+                                            </a>
                                         </td>
                                     </tr>
                                 <?php } ?>

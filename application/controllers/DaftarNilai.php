@@ -23,6 +23,18 @@ class DaftarNilai extends CI_Controller {
 		$this->load->view('footer');
 	}
 
+	public function LihatKeseluruhanNilai($kelas)
+	{
+		$data = array(
+			"siswa" => $this->db->query("SELECT * FROM tm_siswa where kelas = '$kelas'")->result(),
+			"matpel" => $this->db->query("SELECT nama from tm_mata_pelajaran ORDER BY nama ASC")->result()
+		);
+
+		$this->load->view('header');
+		$this->load->view('daftarnilai/lihatkeseluruhannilai', $data);
+		$this->load->view('footer');
+	}
+
 	public function LihatNilai($id)
 	{
 		$data['matpel'] = $this->db->query("
