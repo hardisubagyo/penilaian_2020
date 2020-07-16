@@ -76,7 +76,11 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="chart1 ct-charts" style="height: 300px"></div>
+                        <div class="card">
+                            <div class="card-body analytics-info">
+                                <div id="basic-bar" style="height: 400px"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -84,6 +88,7 @@
     </div>
 </div>
 
+<script src="<?php echo base_url(); ?>assets/assets/libs/echarts/dist/echarts-en.min.js"></script>
 <script>
     $(function() {
         "use strict";
@@ -116,7 +121,7 @@
                 scaleMinSpace: 40,
                 offset: 20,
                 labelInterpolationFnc: function(value) {
-                    return (value / 1) + 'k';
+                    return value;
                 }
             },
 
@@ -148,7 +153,7 @@
         });
 
         /*Rata-rata*/
-        new Chartist.Bar('.chart1', {
+        /*new Chartist.Bar('.chart1', {
             labels: [
                     <?php 
                         foreach($kkm as $item){
@@ -191,8 +196,81 @@
                     style: 'stroke-width: 25px'
                 });
             }
+        });*/
+
+        var myChart = echarts.init(document.getElementById('basic-bar'));
+        var option = {
+                // Setup grid
+                grid: {
+                    left: '1%',
+                    right: '2%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+
+                // Add Tooltip
+                tooltip : {
+                    trigger: 'axis'
+                },
+
+                legend: {
+                    data:['Nilai Rata-rata']
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                color: ["#b30000"],
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : [
+                            <?php 
+                                foreach($kkm as $item){
+                                    echo "'".$item->nama."',";
+                                }
+                            ?>
+                        ]
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'Nilai Rata-rata',
+                        type:'bar',
+                        data:[
+                            <?php 
+                                foreach($nilai as $item){
+                                    echo "".$item->total.",";
+                                }
+                            ?>
+                        ],
+                        markPoint : {
+                            data : [
+                                {type : 'max', name: 'Max'},
+                                {type : 'min', name: 'Min'}
+                            ]
+                        }
+                    }
+                ]
+            };
+        myChart.setOption(option);
+
+        $(function () {
+            myChart.resize();
         });
 
 
     });
+
 </script>
