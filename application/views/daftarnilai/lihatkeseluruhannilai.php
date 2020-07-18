@@ -11,23 +11,51 @@
                 
                 <div class="row">
                     <div class="table-responsive">
-                        <table id="zero_config" class="table table-striped table-bordered">
+                        <table id="zero_config" class="table table-striped table-bordered" width="100%">
                             <thead>
                                 <tr>
                                     <th rowspan="2">No</th>
                                     <th rowspan="2">Siswa</th>
                                     <?php 
                                         foreach($matpel as $items) { 
-                                            echo "<th>".$items->nama."</th>";
+                                            $getTgl = $this->db->query("
+                                                SELECT 
+                                                    tanggal 
+                                                FROM tr_nilai 
+                                                JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai.id_siswa
+                                                WHERE id_mata_pelajaran = '$items->id_mata_pelajaran' 
+                                                AND tm_siswa.kelas = '$kelas'
+                                                GROUP BY tanggal"
+                                            )->result();
+
+                                            if(count($getTgl) != 0){
+                                                echo "<th colspan='".count($getTgl)."'>".$items->nama."</th>";
+                                            }
                                         }
                                     ?>
                                     <th>Sikap & Perilaku</th>
+                                    
                                     <th rowspan="2">Total</th>
                                     <th rowspan="2">Rata-rata</th>
                                 </tr>
                                 <tr>
-                                    <td>Matpel 1</td>
-                                    <td>Matpel 2</td>
+                                    <?php 
+                                        foreach($matpel as $items) { 
+                                            $getTgl = $this->db->query("
+                                                SELECT 
+                                                    tanggal 
+                                                FROM tr_nilai 
+                                                JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai.id_siswa
+                                                WHERE id_mata_pelajaran = '$items->id_mata_pelajaran' 
+                                                AND tm_siswa.kelas = '$kelas'
+                                                GROUP BY tanggal
+                                            ")->result();
+                                            foreach($getTgl as $rows){
+                                                echo "<td>".$rows->tanggal."</td>";
+                                            }
+
+                                        } 
+                                    ?>
                                     <td>Matpel 3</td>
                                 </tr>
                             </thead>
@@ -40,8 +68,15 @@
                                         <td><?php echo $item->nama; ?></td>
                                         <?php 
                                             foreach($matpel as $items) { 
-                                                echo "<td>".$items->nama."</td>";
-                                            }
+                                                $getTgl = $this->db->query("SELECT tanggal FROM tr_nilai WHERE id_mata_pelajaran = '$items->id_mata_pelajaran' GROUP BY tanggal")->result();
+                                                foreach($getTgl as $rows){
+                                                    $getNilaiSiswa = $this->db->query("SELECT nilai FROM tr_nilai WHERE id_mata_pelajaran = '$items->id_mata_pelajaran' AND tanggal = '$rows->tanggal' AND id_siswa = '$item->id_siswa'")->row();
+                                                    if(!empty($getNilaiSiswa->nilai)){
+                                                        echo "<td>".$getNilaiSiswa->nilai."</td>";
+                                                    }else{}
+                                                }
+                                
+                                            } 
                                         ?>
                                         <td></td>
                                         <td></td>
@@ -50,7 +85,6 @@
                                 <?php    
                                     }
                                 ?>
-
                             </tbody>
                         </table>
                     </div>

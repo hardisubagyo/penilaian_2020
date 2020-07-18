@@ -221,8 +221,8 @@
                     feature : {
 
                         magicType : {show: true, type: ['line', 'bar']},
-                        restore : {show: true},
-                        saveAsImage : {show: true}
+                        restore : {show: false},
+                        saveAsImage : {show: false}
                     }
                 },
                 color: ["#b30000"],

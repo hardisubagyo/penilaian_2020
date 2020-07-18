@@ -27,7 +27,8 @@ class DaftarNilai extends CI_Controller {
 	{
 		$data = array(
 			"siswa" => $this->db->query("SELECT * FROM tm_siswa where kelas = '$kelas'")->result(),
-			"matpel" => $this->db->query("SELECT nama from tm_mata_pelajaran ORDER BY nama ASC")->result()
+			"matpel" => $this->db->query("SELECT id_mata_pelajaran,nama from tm_mata_pelajaran ORDER BY nama ASC")->result(),
+			"kelas" => $kelas
 		);
 
 		$this->load->view('header');
