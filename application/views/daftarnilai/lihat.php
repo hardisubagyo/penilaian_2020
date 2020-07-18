@@ -54,7 +54,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="<?php echo site_url('DaftarNilai/LihatDetailNilai/'.$this->uri->segment('3')); ?>">
+                <a href="<?php echo site_url('DaftarNilai/LihatDetailNilai/'.$this->uri->segment('3').'/'.$this->uri->segment('4')); ?>">
                     <button type="button" class="btn btn-warning">Kembali</button>
                 </a>
             </div>

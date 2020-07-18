@@ -32,9 +32,20 @@
                                                 echo "<th colspan='".count($getTgl)."'>".$items->nama."</th>";
                                             }
                                         }
+
+                                        $getTglSikap = $this->db->query("
+                                            SELECT 
+                                                tanggal 
+                                            FROM tr_nilai_sikap 
+                                            JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai_sikap.id_siswa
+                                            WHERE tm_siswa.kelas = '$kelas'
+                                            GROUP BY tanggal"
+                                        )->result();
+
+                                        if(count($getTglSikap) != 0){
+                                            echo "<th colspan='".count($getTglSikap)."'>Sikap & Perilaku</th>";
+                                        }
                                     ?>
-                                    <th>Sikap & Perilaku</th>
-                                    
                                     <th rowspan="2">Total</th>
                                     <th rowspan="2">Rata-rata</th>
                                 </tr>
@@ -53,10 +64,22 @@
                                             foreach($getTgl as $rows){
                                                 echo "<td>".$rows->tanggal."</td>";
                                             }
-
                                         } 
+
+                                        $getTglSikap = $this->db->query("
+                                            SELECT 
+                                                tanggal 
+                                            FROM tr_nilai_sikap 
+                                            JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai_sikap.id_siswa
+                                            WHERE tm_siswa.kelas = '$kelas'
+                                            GROUP BY tanggal"
+                                        )->result();
+                                        if(count($getTglSikap) != 0){
+                                            foreach ($getTglSikap as $value) {
+                                                echo "<td>".$value->tanggal."</td>";
+                                            }    
+                                        }
                                     ?>
-                                    <td>Matpel 3</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,10 +100,65 @@
                                                 }
                                 
                                             } 
+                                
+                                            $getNilaiSikap = $this->db->query("
+                                                SELECT 
+                                                    nilai 
+                                                FROM tr_nilai_sikap 
+                                                JOIN tm_siswa ON tm_siswa.id_siswa = tr_nilai_sikap.id_siswa
+                                                WHERE tm_siswa.kelas = '$kelas' AND tr_nilai_sikap.id_siswa = '$item->id_siswa'"
+                                            )->result();
+                                            if(count($getNilaiSikap) != 0){
+                                                foreach ($getNilaiSikap as $value) {
+                                                    echo "<td>".$value->nilai."</td>";
+                                                }
+                                            }
                                         ?>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        
+                                        <td>
+                                            <?php
+                                                $total = $this->db->query("
+                                                        SELECT 
+                                                            SUM(total) as total 
+                                                        FROM ( 
+                                                            SELECT 
+                                                                SUM(tr_nilai.nilai) as total 
+                                                            FROM tm_siswa 
+                                                            JOIN tr_nilai ON tr_nilai.id_siswa = tm_siswa.id_siswa 
+                                                            WHERE tm_siswa.id_siswa = '$item->id_siswa'
+                                                            UNION 
+                                                            SELECT 
+                                                                SUM(tr_nilai_sikap.nilai) as total 
+                                                            FROM tm_siswa 
+                                                            JOIN tr_nilai_sikap ON tr_nilai_sikap.id_siswa = tm_siswa.id_siswa 
+                                                            WHERE tm_siswa.id_siswa = '$item->id_siswa'
+                                                        ) temp 
+                                                    ")->row();
+                                                echo $total->total;
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                                $rata = $this->db->query("
+                                                        SELECT 
+                                                            AVG(total) as total 
+                                                        FROM ( 
+                                                            SELECT 
+                                                                AVG(tr_nilai.nilai) as total 
+                                                            FROM tm_siswa 
+                                                            JOIN tr_nilai ON tr_nilai.id_siswa = tm_siswa.id_siswa 
+                                                            WHERE tm_siswa.id_siswa = '$item->id_siswa'
+                                                            UNION 
+                                                            SELECT 
+                                                                AVG(tr_nilai_sikap.nilai) as total 
+                                                            FROM tm_siswa 
+                                                            JOIN tr_nilai_sikap ON tr_nilai_sikap.id_siswa = tm_siswa.id_siswa 
+                                                            WHERE tm_siswa.id_siswa = '$item->id_siswa'
+                                                        ) temp 
+                                                    ")->row();
+                                                echo number_format($rata->total,2,',','.');
+                                            ?>
+                                        </td>
                                     </tr>
                                 <?php    
                                     }
